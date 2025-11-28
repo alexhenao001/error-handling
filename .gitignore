@@ -25,3 +25,15 @@ replay_pid*
 
 # Intellij IDEA
 .idea/
+.claude/
+
+# Java
+*/target/
+.vscode
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
