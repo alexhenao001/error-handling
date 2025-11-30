@@ -32,6 +32,11 @@ export class App {
   clearResults() {
     this.lastResponse = null;
     this.lastError = null;
+    this.userForm.email = '';
+    this.userForm.name = '';
+    this.orderForm.email = '';
+    this.orderForm.name = '';
+    this.orderForm.productId = '';
   }
 
   private handleResponse(response: any) {
