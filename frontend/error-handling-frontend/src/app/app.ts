@@ -42,7 +42,6 @@ export class App {
   }
 
   private handleError(error: ErrorResponse) {
-    console.log("Error received", error);
     this.loading = false;
     this.lastResponse = null;
     this.lastError = error;
