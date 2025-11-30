@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from './services/api.service';
@@ -27,7 +27,7 @@ export class App {
     productId: ''
   };
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private cdr: ChangeDetectorRef) {}
 
   clearResults() {
     this.lastResponse = null;
@@ -38,6 +38,7 @@ export class App {
     this.loading = false;
     this.lastResponse = response;
     this.lastError = null;
+    this.cdr.detectChanges();
   }
 
   private handleError(error: ErrorResponse) {
@@ -45,6 +46,7 @@ export class App {
     this.loading = false;
     this.lastResponse = null;
     this.lastError = error;
+    this.cdr.detectChanges();
   }
 
   triggerSuccess() {
