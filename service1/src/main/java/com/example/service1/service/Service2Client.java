@@ -1,10 +1,12 @@
 package com.example.service1.service;
 
 import com.example.service1.exception.CustomExceptions;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -13,6 +15,12 @@ import reactor.core.publisher.Mono;
 import java.util.Map;
 import java.util.UUID;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+record ErrorResponse(ErrorDetails error) {}
+
+@JsonIgnoreProperties(ignoreUnknown = true) 
+record ErrorDetails(String message) {}
+
 @Service
 public class Service2Client {
 
@@ -20,6 +28,9 @@ public class Service2Client {
 
     @Autowired
     private WebClient service2WebClient;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     public Map<String, Object> callService2Endpoint(String endpoint) {
         return callService2Endpoint(endpoint, null);
@@ -48,7 +59,7 @@ public class Service2Client {
 
             Map<String, Object> response = requestSpec
                     .retrieve()
-                    .bodyToMono(Map.class)
+                    .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
                     .block();
 
             logger.debug("Service 2 call successful: {} | Request ID: {}", endpoint, requestId);
@@ -86,7 +97,7 @@ public class Service2Client {
                     .uri(endpoint)
                     .header("X-Request-ID", requestId)
                     .retrieve()
-                    .bodyToMono(Map.class)
+                    .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
                     .block();
 
             logger.debug("Service 2 GET call successful: {} | Request ID: {}", endpoint, requestId);
@@ -115,11 +126,8 @@ public class Service2Client {
 
     private String extractErrorMessage(String responseBody) {
         try {
-            JsonNode jsonNode = new com.fasterxml.jackson.databind.ObjectMapper().readTree(responseBody);
-            JsonNode errorNode = jsonNode.get("error");
-            if (errorNode != null && errorNode.get("message") != null) {
-                return errorNode.get("message").asText();
-            }
+            return objectMapper.readValue(responseBody, ErrorResponse.class)
+                    .error().message();
         } catch (Exception e) {
             logger.warn("Could not parse error response from Service 2: {}", responseBody);
         }
