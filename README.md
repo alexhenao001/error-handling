@@ -61,14 +61,14 @@ Error Interceptor      Global Exception Handler  Global Exception Handler
 cd service2
 mvn spring-boot:run
 ```
-✅ Service 2 will start on **http://localhost:8082**
+ Service 2 will start on **http://localhost:8082**
 
 ### 2. Start Service 1 (Upstream)
 ```bash
 cd service1
 mvn spring-boot:run
 ```
-✅ Service 1 will start on **http://localhost:8081**
+ Service 1 will start on **http://localhost:8081**
 
 ### 3. Start Angular Frontend
 ```bash
@@ -76,7 +76,7 @@ cd frontend/error-handling-frontend
 npm install
 npm start
 ```
-✅ Frontend will start on **http://localhost:4200**
+ Frontend will start on **http://localhost:4200**
 
 ## Testing the Demo
 
@@ -221,22 +221,22 @@ npm install
 
 This demo showcases:
 
-✅ **Enterprise Error Handling Patterns**
+ **Enterprise Error Handling Patterns**
 - Centralized exception handling with @ControllerAdvice
 - Standardized error response formats
 - Request correlation and tracing
 
-✅ **Microservice Communication**
+ **Microservice Communication**
 - Service-to-service error propagation
 - HTTP client error handling with WebClient
 - Timeout and retry strategies
 
-✅ **Frontend Error Handling**
+ **Frontend Error Handling**
 - HTTP interceptors for global error handling
 - User-friendly error display
 - Modern Angular patterns and syntax
 
-✅ **Observability**
+**Observability**
 - Structured logging with correlation IDs
 - Error tracking across service boundaries
 - Request flow visibility
