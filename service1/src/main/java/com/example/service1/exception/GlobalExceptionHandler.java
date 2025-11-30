@@ -22,6 +22,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDownstreamServiceException(
             CustomExceptions.DownstreamServiceException ex, HttpServletRequest request) {
         String requestId = getRequestId(request);
+        logger.error("Downstream service error: {} | Service: {} | Request ID: {}",
+                ex.getMessage(), ex.getServiceName(), requestId);
         
         Map<String, Object> details = new HashMap<>();
         details.put("serviceName", ex.getServiceName());
@@ -35,9 +37,7 @@ public class GlobalExceptionHandler {
             request.getRequestURI(),
             details
         );
-        
-        logger.error("Downstream service error: {} | Service: {} | Request ID: {}", 
-                    ex.getMessage(), ex.getServiceName(), requestId);
+
         
         HttpStatus status = mapDownstreamStatusToUpstream(ex.getStatusCode());
         return ResponseEntity.status(status).body(errorResponse);
